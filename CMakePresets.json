@@ -1,0 +1,117 @@
+﻿{
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "description": "Sets generator, build and install directory, vcpkg",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        }
+      },
+      "environment": {
+        "VCPKG_FEATURE_FLAGS": "manifests,versions,binarycaching,registries"
+      }
+    },
+    {
+      "name": "x64-windows",
+      "description": "Sets x86 arch, compilers, build type",
+      "inherits": [ "base" ],
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "cl"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Windows" ]
+        }
+      }
+    },
+    {
+      "name": "linux-base",
+      "description": "Sets compilers, build type",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "g++"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Linux" ]
+        }
+      }
+    },
+    {
+      "name": "linux-warnings",
+      "description": "Enables dev warnings (-wdev)",
+      "inherits": "linux-base",
+      "warnings": {
+        "dev": true
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "core-build",
+      "description": "Inherits environment from base configurePreset",
+      "configurePreset": "base",
+      "hidden": true,
+      "inheritConfigureEnvironment": true
+
+    },
+    {
+      "name": "clean-build",
+      "description": "Clean before build (--clean-first)",
+      "configurePreset": "x64-windows",
+      "inherits": "core-build",
+      "cleanFirst": true
+    },
+    {
+      "name": "verbose-build",
+      "description": "Passes -v to Ninja",
+      "configurePreset": "x64-windows",
+      "inherits": "core-build",
+      "nativeToolOptions": [ "-v" ]
+    },
+    {
+      "name": "linux-clean-build",
+      "configurePreset": "linux-base",
+      "inherits": "clean-build"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "core-test",
+      "description": "Enable output on failure",
+      "configurePreset": "base",
+      "hidden": false,
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "windows-core-test",
+      "configurePreset": "x64-windows",
+      "inherits": "core-test"
+    },
+    {
+      "name": "linux-core-test",
+      "configurePreset": "linux-base",
+      "inherits": "core-test"
+    }
+  ]
+}

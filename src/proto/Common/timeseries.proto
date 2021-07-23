@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package volue.mesh.protobuf;
+
+message Timeseries {
+  ObjectId object_id = 1;
+
+  Resolution resolution = 2;
+
+  // source_delta_t denotes which resolution this 
+  // timeseries has in storage. If delta_t and source_delta_t
+  // doesn't match, then you are not allowed to write.
+  // optional uint64 source_resolution = 2;
+
+  // TODO:
+  // optional curve_type <- Relevant when visualizing data
+  // optional unit_of_measurement <- Relevant
+  // optional version
+
+  UtcInterval interval = 3;
+
+  // data contains an apache arrow byte representation of the timeseries points.
+  // Stored in the following columns:
+  // 0: (uint64) ticks
+  // 1: (uint32) flags
+  // 2: (double) value
+  bytes data = 4;
+}

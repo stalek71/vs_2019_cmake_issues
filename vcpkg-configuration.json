@@ -1,0 +1,14 @@
+{
+  "default-registry": {
+    "kind": "builtin",
+    "baseline": "b67fab9861239e33b722b9a44f5c96dec6ca807e"
+  },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/PowelAS/sme-vcpkg",
+      "packages": [],
+      "baseline": "bb63cbdbf779f654cbb0abbb010a5aaddb868883"
+    }
+  ]
+}

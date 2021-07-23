@@ -1,0 +1,14 @@
+{
+  "name": "mesh",
+  "version-string": "0.0.1",
+  "dependencies": [
+    {
+      "name": "gtest",
+      "version>=": "1.11.0"
+    },
+    "protobuf",
+    "grpc"
+  ],
+  "overrides": [
+  ]
+}

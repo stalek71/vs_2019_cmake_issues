@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+package volue.mesh.protobuf;
+
+message Guid {
+  // Bytes in LITTLE ENDIAN format
+  bytes bytes_le = 1;
+}
+
+message UtcInterval {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+}
+
+// Contains one or more ways to uniquely identify an object
+message ObjectId {
+  optional int64 timskey = 1;
+  optional Guid guid = 2;
+  optional string full_name = 3; // Not implemented yet
+}
+
+message VersionInfo {
+  string version = 1;
+  string name = 2;
+  string build_date = 3;
+  string commit = 4;
+  string full_version = 5;
+}
+
+message Resolution {
+  enum ResolutionType {
+    BREAKPOINT = 0;
+    MIN15 = 1;
+    HOUR = 2;
+    DAY = 3;
+    WEEK = 4;
+    MONTH = 5;
+    YEAR = 6;
+  }
+  ResolutionType type = 1;
+}
