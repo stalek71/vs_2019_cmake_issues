@@ -88,6 +88,11 @@
       "nativeToolOptions": [ "-v" ]
     },
     {
+      "name": "linux-normal-build",
+      "configurePreset": "linux-base",
+      "inherits": "core-build"
+    },
+    {
       "name": "linux-clean-build",
       "configurePreset": "linux-base",
       "inherits": "clean-build"

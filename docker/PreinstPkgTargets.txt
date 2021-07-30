@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------------------------------------------
+This is what has been installed on mesh/build-base:latest image
+--------------------------------------------------------------------------------------------------------------------
+
+The package protobuf:x64-linux-musl provides CMake targets:
+
+    find_package(protobuf CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
+
+The package grpc:x64-linux-musl provides CMake targets:
+
+    find_package(gRPC CONFIG REQUIRED)
+    # Note: 8 target(s) were omitted.
+    target_link_libraries(main PRIVATE gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++)
+
+    find_package(modules CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE re2::re2 c-ares::cares)
+
+The package gtest:x64-linux-musl provides CMake targets:
+
+    find_package(GTest CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)

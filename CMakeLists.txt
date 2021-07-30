@@ -11,12 +11,19 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 endif()
 
+# Generate compile_commands.json files so "Compile Active File" button provided by CMake extension works as expected
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # project definition
 project ("Mesh" 
 	VERSION 1.0.1 
 	DESCRIPTION "Mesh solutions"
 	LANGUAGES CXX
 )
+
+# Enable testing
+enable_testing()
+set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST) # Postpone tests discovery to the moment they should be run
 
 # CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
@@ -53,4 +60,23 @@ add_subdirectory ("tests")
 if (MSVC)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Storage)
 endif()
+
+
+# Docker build target
+# https://stackoverflow.com/questions/51474255/run-docker-build-in-cmake/55543728
+
+#find_program(Docker_EXECUTABLE docker)
+
+#if(NOT Docker_EXECUTABLE)
+#    message(FATAL_ERROR "Cannot find the docker executable!")
+#endif()
+
+#add_custom_target(Storage_DockerImage
+#    COMMAND ${CMAKE_COMMAND} -E copy_directory ${FFMPEG} ${CMAKE_CURRENT_LIST_DIR}
+#    COMMAND ${CMAKE_COMMAND} -E copy ${FFMPEG_SO_INSTALL} ${FFMPEG}/lib
+
+#	# Docker build command
+#    COMMAND ${Docker_EXECUTABLE} build --tag Storage --file
+#        ${CMAKE_CURRENT_LIST_DIR}/Dockerfile ${CMAKE_CURRENT_LIST_DIR}
+#)
 

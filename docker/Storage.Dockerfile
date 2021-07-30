@@ -1,25 +1,11 @@
-# Docker file should be called from the root project folder, because it uses whole build tree during multi stage build
+# Docker file should be called from the root project folder, because it uses whole build tree during the multi stage build.
 # It should be refactored to multiple independent projects with an introduction of own vcpkgs (see vcpkg-configuration.json file in root folder)
 
-FROM alpine:latest as build
+# To bui;ld it use the command shown below (from the root folder). Don't overlook dot (.) at the end:
+# docker build -t mesh/storage -f docker/Storage.Dockerfile .
+
+FROM mesh/build-base:latest as build
 LABEL description="Build container - Mesh"
-
-# Core packages
-RUN apk update && \
-    apk add --no-cache \
-    autoconf build-base binutils cmake curl file gcc g++ git libgcc libtool linux-headers make musl-dev libc6-compat tar unzip wget ninja cmake zip pkgconf
-
-# VCPKG
-RUN cd /tmp \
-    && git clone https://github.com/Microsoft/vcpkg.git \ 
-    && cd vcpkg \
-    && ./bootstrap-vcpkg.sh -useSystemBinaries
-
-# Triplet for alpine
-COPY docker/x64-linux-musl.cmake /tmp/vcpkg/triplets/
-
-# We can preinstall any packages if needed and create base docker image for builds
-# RUN VCPKG_FORCE_SYSTEM_BINARIES=1 ./tmp/vcpkg/vcpkg install boost-asio boost-filesystem http-parser
 
 # Create mesh folder and switch to it
 WORKDIR /mesh
@@ -30,7 +16,7 @@ COPY src src
 COPY tests tests
 
 # Copy files
-COPY CMakeLists.txt CMakePresets.json vcpkg.json vcpkg-configuration.json .
+COPY CMakeLists.txt CMakePresets.json vcpkg.json vcpkg-configuration.json ./
 
 # Environment vars
 ENV VCPKG_ROOT=/tmp/vcpkg

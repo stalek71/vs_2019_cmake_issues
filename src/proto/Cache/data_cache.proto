@@ -6,7 +6,7 @@ import "core_types.proto";
 
 package volue.mesh.protobuf;
 
-// The calculation service definition.
-service Calculation {
+// The data cache service definition.
+service DataCache {
   rpc GetMeshVersion(google.protobuf.Empty) returns (MeshVersionInfo) {}
 }

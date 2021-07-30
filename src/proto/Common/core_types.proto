@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 package volue.mesh.protobuf;
@@ -22,7 +21,7 @@ message ObjectId {
   optional string full_name = 3; // Not implemented yet
 }
 
-message VersionInfo {
+message MeshVersionInfo {
   string version = 1;
   string name = 2;
   string build_date = 3;
