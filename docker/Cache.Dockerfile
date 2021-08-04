@@ -32,11 +32,10 @@ RUN mkdir out \
 
 # Copy to the final (second stage) image
 FROM scratch as runtime
-LABEL description="Mesh - Storage Service"
+LABEL description="Mesh - Cache Service"
 
 # Main files
-COPY --from=build /mesh/out/src/Libraries/Calculation/libCalculation.so /mesh/out/src/Libraries/Calculation/libCalculation.so
-COPY --from=build /mesh/out/src/Services/StorageSvc/StorageSvc /mesh/out/src/Services/StorageSvc/StorageSvc
+COPY --from=build /mesh/out/src/Services/CacheSvc/CacheSvc /mesh/out/src/Services/CacheSvc/CacheSvc
 
 # Runtime dependencies
 COPY --from=build /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
@@ -45,7 +44,7 @@ COPY --from=build /lib/libc.musl-x86_64.so.1 /lib/libc.musl-x86_64.so.1
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 
 # Service start
-CMD ["/mesh/out/src/Services/StorageSvc/StorageSvc"]
+CMD ["/mesh/out/src/Services/CacheSvc/CacheSvc"]
 
 # Service port
-#EXPOSE 8080
+EXPOSE 8080

@@ -9,7 +9,7 @@ LABEL description="Build container - Mesh"
 # Core packages
 RUN apk update && \
     apk add --no-cache \
-    autoconf build-base binutils cmake curl file gcc g++ git libgcc libtool linux-headers make musl-dev libc6-compat tar unzip wget ninja cmake zip pkgconf
+    autoconf build-base binutils cmake curl file gcc g++ git libgcc libtool linux-headers make musl-dev libc6-compat tar unzip wget ninja zip pkgconf
 
 # VCPKG
 RUN cd /tmp \
@@ -19,6 +19,9 @@ RUN cd /tmp \
 
 # Triplet for alpine
 COPY docker/x64-linux-musl.cmake /tmp/vcpkg/triplets/
+
+# Replace outdated cmake module and add support for PLUGIN param (can be removed when new version of cmake ships it)
+COPY docker/cmake.replacements/Modules/FindProtobuf.cmake /usr/share/cmake/Modules/FindProtobuf.cmake
 
 # Create mesh folder and switch to it
 WORKDIR /mesh
@@ -33,6 +36,9 @@ COPY CMakeLists.txt CMakePresets.json vcpkg.json vcpkg-configuration.json ./
 
 # Environment vars
 ENV VCPKG_ROOT=/tmp/vcpkg
+
+# gRPC generator files
+ENV PATH=/mesh/out/vcpkg_installed/x64-linux-musl/tools/grpc:/mesh/out/vcpkg_installed/x64-linux-musl/tools/protobuf:$PATH
 
 # Build whole product with deps - it can be very good idea to define "empty" target to avoid whole build and install vcpkgs only
 RUN mkdir out \

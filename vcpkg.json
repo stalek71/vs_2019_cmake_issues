@@ -3,8 +3,8 @@
   "version-string": "0.0.1",
   "dependencies": [
     "gtest",
-    "protobuf",
-    "grpc"
+    "grpc",
+    "protobuf"
   ],
   "overrides": [
   ]

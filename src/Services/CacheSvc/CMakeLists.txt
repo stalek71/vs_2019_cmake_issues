@@ -43,9 +43,12 @@ target_link_libraries(CacheSvc
 # protobuf_generate function definition is available under the link below:
 # https://github.com/protocolbuffers/protobuf/blob/master/cmake/protobuf-config.cmake.in
 get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
+message("grpc_cpp_plugin location is: ${grpc_cpp_plugin_location}")
 
 protobuf_generate(TARGET CacheSvc APPEND_PATH LANGUAGE cpp)
 protobuf_generate(TARGET CacheSvc APPEND_PATH LANGUAGE grpc GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}")
 
 # Installation
 install(TARGETS CacheSvc)
+
+# https://stackoverflow.com/questions/66608574/protobuf-generate-grpc-cpp-plugin-fails-with-status-code-1

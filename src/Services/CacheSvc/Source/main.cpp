@@ -22,7 +22,7 @@ using grpc::Status;
 
 void RunServer() 
 {
-  std::string server_address("0.0.0.0:50051");
+  std::string server_address("0.0.0.0:8080");
   mesh::service::DataCache::DataCacheService service;
 
   ServerBuilder builder;

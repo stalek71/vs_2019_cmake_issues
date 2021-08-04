@@ -9,16 +9,22 @@
 
 using namespace std;
 
-int main()
+int main(int argc, const char **argv)
 {
-    CacheSvcClient client(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
+    cout << "Hello from ClientApp!" << endl;
+
+    auto svcEndpoint = "localhost:8080";
+    if (argc == 2)
+        svcEndpoint = argv[1];
+
+    CacheSvcClient client(grpc::CreateChannel(svcEndpoint, grpc::InsecureChannelCredentials()));
 
     volue::mesh::protobuf::MeshVersionInfo response;
     auto result = client.GetMeshVersion(&response);
 
     if (result.ok())
     {
-        cout << "Product name is " << response.name() << ", version is " << response.version() << endl;
+        cout << "Product name is " << response.name() << ", the version is " << response.version() << endl;
     }
     else
     {
