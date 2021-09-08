@@ -1,0 +1,19 @@
+parameters:
+  - name: imageName
+    type: string
+  - name: context
+    type: string
+  - name: dockerfilePath
+    type: string
+  - name: registryAddress
+    type: string
+
+steps:
+  - script: |
+      docker build \
+      -t ${{ parameters.registryAddress }}/${{ parameters.imageName }} \
+      -t ${{ parameters.imageName }}:latest \
+      -t ${{ parameters.registryAddress }}/${{ parameters.imageName }}:latest \
+      -f $(System.DefaultWorkingDirectory)/${{ parameters.dockerfilePath }} \
+      $(System.DefaultWorkingDirectory)/${{ parameters.context }}
+    displayName: "Build image ${{ parameters.imageName }}"

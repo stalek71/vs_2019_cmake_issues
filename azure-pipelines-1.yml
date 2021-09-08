@@ -1,0 +1,30 @@
+trigger:
+  - develop
+
+pool: Default
+name: "Build and push image to local registry"
+
+variables:
+  registryServiceConnection: "acr-devmesh"
+  registryAddress: "devmesh.azurecr.io"
+
+steps:
+
+  - template: templates/build_image.template.yml
+    parameters:
+      imageName: mesh/cache
+      context: /
+      dockerfilePath: docker/Cache.Dockerfile 
+      registryAddress: $(registryAddress)
+
+  - template: templates/push_image.template.yml
+    parameters:
+      imageName: mesh/cache
+      registryServiceConnection: $(registryServiceConnection)
+      registryName: Dev Acr
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'

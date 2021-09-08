@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 2,
   "cmakeMinimumRequired": {
     "major": 3,
@@ -86,6 +86,11 @@
       "configurePreset": "x64-windows",
       "inherits": "core-build",
       "nativeToolOptions": [ "-v" ]
+    },
+    {
+      "name": "linux-normal-build",
+      "configurePreset": "linux-base",
+      "inherits": "core-build"
     },
     {
       "name": "linux-clean-build",

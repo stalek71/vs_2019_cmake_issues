@@ -1,5 +1,4 @@
 #pragma once
-#include "calculation_export.h"
 
 namespace mesh::common
 {
@@ -9,7 +8,7 @@ namespace mesh::common
 		TSPoint();
 
 	private:
-		double _time;
+		TimePoint _time;
 		double _value;
 	};
 }
