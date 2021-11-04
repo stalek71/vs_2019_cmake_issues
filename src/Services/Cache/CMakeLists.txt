@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.20)
 
-# Add source to this project's executable.
-#add_executable (Mesh "Mesh.cpp" "Mesh.h")
+# Include sub-projects.
+add_subdirectory ("CalculationResult")
+add_subdirectory ("TimeSeries")
 
-# TODO: Add tests and install targets if needed.

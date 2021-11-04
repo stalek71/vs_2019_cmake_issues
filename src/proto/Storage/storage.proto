@@ -1,79 +1,12 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
+//import "google/protobuf/timestamp.proto";
+import "core_types.proto";
 
 package volue.mesh.protobuf;
 
 // The storage service definition.
-service MeshStorage {
-  rpc GetVersion(google.protobuf.Empty) returns (VersionInfo) {}
-
-  rpc ReadTimeseries(ReadTimeseriesRequest) returns (ReadTimeseriesResponse) {}  
-  rpc WriteTimeseries(WriteTimeseriesRequest) returns (google.protobuf.Empty) {}  
-
-  // Start a Mesh session, return the id of the session
-  rpc StartSession(google.protobuf.Empty) returns (Guid) {}
-
-  rpc EndSession(Guid) returns (google.protobuf.Empty) {}
-  rpc Commit(Guid) returns (google.protobuf.Empty) {}
-  rpc Rollback(Guid) returns (google.protobuf.Empty) {}
-}
-
-
-// Not implemented server-side yet {
-message Transformation {
-  Resolution resolution = 1;
-  enum TransformationType {
-	SUM = 0;
-	SUMI = 1;
-	AVG = 2;
-	AVGI = 3;
-	FIRST = 4;
-	LAST = 5;
-	MIN = 6;
-	MAX = 7;
-  }
-  TransformationType type = 2;
-
-  // timezone is relevant when transforming to Day/Week/Month, 
-  // to know when exactly the local day begins. Thus we need
-  // to include some time zone info, to be able to do the transform:
-  // TODO: optional string timezone = 3;
-}
-// }
-
-message ReadTimeseriesRequest {
-  Guid session_id = 1;
-
-  // The search can return more than one valid object.
-  // In that case, the timeseries will be read for all
-  // valid objects, for the requested interval. 
-  ObjectId object_id = 2;
-  UtcInterval interval = 3;
-
-  // if we request points from a breakpoint series, the actual points
-  // describing our interval, might be long before the actual interval.
-  // Should we then return the actual point (outside our interval),
-  // or a "fake"/virtual point inside our interval?
-  // TODO: bool allow_virtual_points?
-
-  // TODO: optional Transformation transformation = 4;
-}
-
-message ReadTimeseriesResponse {
-  // A search expression may return several timeseries.
-  repeated Timeseries timeseries = 1;
-}
-
-message WriteTimeseriesRequest {
-  Guid session_id = 1;  
-  
-  // Must point to exactly one Timeseries
-  // (entry, attribute or value)
-  ObjectId object_id = 2;
-
-  // The resolution of the points has to fit the stored timeseries. 
-  // Otherwise it will be rejected.
-  Timeseries timeseries = 3;
+service Storage {
+  rpc GetMeshVersion(google.protobuf.Empty) returns (MeshVersionInfo) {}
 }

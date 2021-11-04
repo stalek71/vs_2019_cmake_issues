@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "core_types.proto";
+
+package volue.mesh.protobuf;
+
+// The storage service definition.
+service TimeSeriesStorage {
+  rpc GetMeshVersion(google.protobuf.Empty) returns (MeshVersionInfo);
+
+  // Function to obtain next VersionTS value
+  rpc GetNextDataSetTS(google.protobuf.Empty) returns (GetNextDataSetTSResponse);
+
+  // Save operations
+  rpc CreateSerie(CreateSerieRequest) returns (CreateSerieResponse);
+  rpc StoreMetadata(StoreMetadataRequest) returns (google.protobuf.Empty);
+  rpc StorePoints(StorePointsRequest) returns (StorePointsResponse);
+  
+  // Read operations
+  rpc ReadPoints(ReadPointsRequest) returns (ReadPointsResponse);
+}
+
+enum PointType {
+  P1D = 0;
+  P2D = 1;
+}
+
+enum ScopeType {
+  GLOBAL = 0;
+  USER = 50;
+  SESSION = 100;
+}
+
+enum CurveType {
+  UNKNOWN = 0;
+  STAIRCASE_START_OF_STEP = 1;
+  PIECEWISE_LINEAR = 2;
+}
+
+// GetNextDataSetTS
+message GetNextDataSetTSResponse {
+  int32 next_ts = 1;
+}
+
+// CreateSerie
+message CreateSerieRequest {
+  string name = 1;
+  PointType point_type = 2;
+}
+
+message CreateSerieResponse {
+  int32 serie_id = 1;
+}
+
+// StoreMetadata
+message StoreMetadataRequest {
+  int32 serie_id = 1;
+  CurveType curve_type = 2;
+  Delta delta = 3;
+  int32 version_ts = 4;
+  ScopeType scope_type = 5;
+  optional int32 scope_id = 6;
+}
+
+// StorePoints
+message StorePointsRequest {
+  int32 serie_id = 1;
+  int32 version_ts = 2;
+  ScopeType scope_type = 3;
+  optional int32 scope_id = 4;
+  repeated StorePointData points = 5;
+}
+
+message StorePointsResponse {
+  int32 rows_inserted = 1;
+  int64 time_in_microsecs = 2;
+  double rows_per_sec = 3;
+}
+
+message StorePointData {
+  google.protobuf.Timestamp dateTime = 1;
+  double value = 2;
+  int32 private_flags = 3;
+  int32 propagating_flags = 4;
+}
+
+// Read points
+message ReadPointsRequest {
+  int32 serie_id = 1;
+  // When dateTime values are not provided we read all the points belonging to timeserie
+  optional google.protobuf.Timestamp dateTimeFrom = 2;
+  optional google.protobuf.Timestamp dateTimeTo = 3;
+  optional bool includingEndPoint = 4; // Including points that are equal to dateTimeTo
+}
+
+message ReadPointData {
+  google.protobuf.Timestamp dateTime = 1;
+  double value = 2;
+  int32 private_flags = 3;
+  int32 propagating_flags = 4;
+  int32 version_ts = 5;
+  ScopeType scope_type = 6;
+  optional int32 scope_id = 7;
+}
+
+message ReadPointsResponse {
+  int32 rows_read = 1;
+  int64 time_in_microsecs = 2;
+  double rows_per_sec = 3;
+  repeated ReadPointData points = 4;
+}

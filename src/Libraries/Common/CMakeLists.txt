@@ -1,20 +1,23 @@
 ﻿cmake_minimum_required (VERSION 3.20)
 
 # Public interface files directory
-set(pf "include/Common")
+set(if "include/Common")
 
 # Interface files (public files)
 set(publicFiles 
-	${pf}/Core/TimePoint.h
-	${pf}/TimeSeries/TSPoint.h
-	${pf}/TimeSeries/TimeSeries.h
+	${if}/Core/TimePoint.h
+	${if}/TimeSeries/TSPoint.h
+	${if}/TimeSeries/TimeSeries.h
 )
+
+# Private files directory
+set(pf "Source")
 
 # Private project files
 set(privateFiles
-	Core/TimePoint.cpp
-	TimeSeries/TSPoint.cpp
-	TimeSeries/TimeSeries.cpp
+	${pf}/Core/TimePoint.cpp
+	${pf}/TimeSeries/TSPoint.cpp
+	${pf}/TimeSeries/TimeSeries.cpp
 )
 
 add_library(Common
@@ -31,7 +34,7 @@ target_include_directories(Common PUBLIC
 # Precompiled header definitions for public and private scopes
 target_precompile_headers(Common 
 	PUBLIC 
-		${pf}/Core/TimePoint.h 
+		${if}/Core/TimePoint.h 
 		<chrono>
 	PRIVATE 
 		<unordered_map>

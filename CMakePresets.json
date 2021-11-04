@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 2,
   "cmakeMinimumRequired": {
     "major": 3,
@@ -42,11 +42,43 @@
       }
     },
     {
+      "name": "x64-windows-rel-min",
+      "description": "Sets x86 arch, compilers, build type",
+      "inherits": [ "base" ],
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
+        "CMAKE_CXX_COMPILER": "cl"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Windows" ]
+        }
+      }
+    },
+    {
       "name": "linux-base",
       "description": "Sets compilers, build type",
       "inherits": "base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "g++"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Linux" ]
+        }
+      }
+    },
+    {
+      "name": "linux-base-rel-min",
+      "description": "Sets compilers, build type",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
         "CMAKE_CXX_COMPILER": "g++"
       },
       "vendor": {
@@ -88,8 +120,25 @@
       "nativeToolOptions": [ "-v" ]
     },
     {
+      "name": "release-clean-build",
+      "description": "Clean before build (--clean-first)",
+      "configurePreset": "x64-windows-rel-min",
+      "inherits": "core-build",
+      "cleanFirst": true
+    },
+    {
+      "name": "linux-normal-build",
+      "configurePreset": "linux-base",
+      "inherits": "core-build"
+    },
+    {
       "name": "linux-clean-build",
       "configurePreset": "linux-base",
+      "inherits": "clean-build"
+    },
+    {
+      "name": "linux-rel-build",
+      "configurePreset": "linux-base-rel-min",
       "inherits": "clean-build"
     }
   ],

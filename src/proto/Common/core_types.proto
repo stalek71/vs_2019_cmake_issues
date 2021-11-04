@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 package volue.mesh.protobuf;
@@ -15,14 +14,12 @@ message UtcInterval {
   google.protobuf.Timestamp end_time = 2;
 }
 
-// Contains one or more ways to uniquely identify an object
-message ObjectId {
-  optional int64 timskey = 1;
-  optional Guid guid = 2;
-  optional string full_name = 3; // Not implemented yet
+message Delta {
+  uint64 delta = 1; // miliseconds - based on std::chrono::milliseconds (TimeSpan from Mesh also uses int64 to measure time, but in "ticks")
 }
 
-message VersionInfo {
+
+message MeshVersionInfo {
   string version = 1;
   string name = 2;
   string build_date = 3;
@@ -30,15 +27,3 @@ message VersionInfo {
   string full_version = 5;
 }
 
-message Resolution {
-  enum ResolutionType {
-    BREAKPOINT = 0;
-    MIN15 = 1;
-    HOUR = 2;
-    DAY = 3;
-    WEEK = 4;
-    MONTH = 5;
-    YEAR = 6;
-  }
-  ResolutionType type = 1;
-}
